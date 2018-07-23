@@ -1,0 +1,9 @@
+[package]
+name = "rebound"
+version = "0.1.0"
+authors = ["Mabry Cervin <mabry.cervin@gmail.com>"]
+
+[dependencies]
+ggez = "0.4"
+specs = "0.11"
+specs-derive = "0.2.0"
