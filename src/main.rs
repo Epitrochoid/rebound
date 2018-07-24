@@ -41,10 +41,10 @@ impl GameState {
         world.register::<components::Kinematics>();
         world.register::<components::Draw>();
 
-        let ball = drawables::Ball { radius: 10.0, blend_mode: None };
+        let ball = drawables::Ball { radius: 10.0, blend_mode: Some(graphics::BlendMode::Alpha) };
 
         world.create_entity()
-            .with(components::Position(Vector2::new(0.0, 0.0)))
+            .with(components::Position(Vector2::new(100.0, 100.0)))
             .with(components::Kinematics { velocity: Vector2::new(0.0, 0.0),
                                            acceleration: Vector2::new(0.0, 0.0)})
             .with(components::Draw(ball))
@@ -61,6 +61,18 @@ impl event::EventHandler for GameState {
     }
 
     fn draw(&mut self, ctx: &mut Context) -> GameResult<()> {
+        use specs::Join;
+
+        let drawings = self.specs_world.read_storage::<components::Draw>();
+        let positions = self.specs_world.read_storage::<components::Position>();
+
+        graphics::clear(ctx);
+
+        for (draw, pos) in (&drawings, &positions).join() {
+            graphics::draw(ctx, &draw.0, graphics::Point2::new(pos.0.x, pos.0.y), 0.0)?;
+        }
+
+        graphics::present(ctx);
         Ok(())
     }
 }

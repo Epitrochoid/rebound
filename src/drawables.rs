@@ -4,9 +4,11 @@ use ggez::{
     graphics::{
         BlendMode,
         circle,
+        Color,
         Drawable,
         DrawMode,
-        DrawParam
+        DrawParam,
+        set_color
     }
 };
 
@@ -18,6 +20,7 @@ pub struct Ball {
 
 impl Drawable for Ball {
     fn draw_ex(&self, ctx: &mut Context, param: DrawParam) -> GameResult<()> {
+        set_color(ctx, Color::new(1.0, 0.0, 0.0, 1.0));
         circle(ctx, DrawMode::Fill, param.dest, self.radius, 2.0)
     }
 
