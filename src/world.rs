@@ -6,7 +6,6 @@ use scene;
 
 pub struct World {
     pub specs_world: specs::World,
-    pub scenes: scene::SceneStack
 }
 
 impl World {
@@ -18,8 +17,7 @@ impl World {
 
     fn new(ctx: &mut ggez::Context) -> Self {
         let specs_world = specs::World::new();
-        let scenes = scene::SceneStack::new();
 
-        { specs_world, scenes }
+        World { specs_world }
     }
 }

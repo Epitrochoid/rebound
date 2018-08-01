@@ -29,6 +29,8 @@ use std::{
 
 mod components;
 mod drawables;
+mod scene;
+mod world;
 
 struct GameState {
     specs_world: World
