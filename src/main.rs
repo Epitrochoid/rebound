@@ -30,6 +30,7 @@ use std::{
 mod components;
 mod drawables;
 mod scene;
+mod scenes;
 mod world;
 
 struct GameState {
