@@ -18,8 +18,7 @@ use ggez::{
 };
 
 use specs::{
-    Entity,
-    World
+    Entity
 };
 
 use std::{
@@ -34,26 +33,31 @@ mod scenes;
 mod world;
 
 struct GameState {
-    specs_world: World
+    world: world::World,
+    scene_stack: scene::SceneStack<Context>
 }
 
 impl GameState {
     fn new(ctx: &mut Context) -> GameResult<GameState> {
-        let mut world = World::new();
-        world.register::<components::Position>();
-        world.register::<components::Kinematics>();
-        world.register::<components::Draw>();
+        let mut world = world::World::new();
+        world.specs_world.register::<components::Position>();
+        world.specs_world.register::<components::Kinematics>();
+        world.specs_world.register::<components::Draw>();
 
         let ball = drawables::Ball { radius: 10.0, blend_mode: Some(graphics::BlendMode::Alpha) };
 
-        world.create_entity()
+        world.specs_world.create_entity()
             .with(components::Position(Vector2::new(100.0, 100.0)))
             .with(components::Kinematics { velocity: Vector2::new(0.0, 0.0),
                                            acceleration: Vector2::new(0.0, 0.0)})
             .with(components::Draw(ball))
             .build();
 
-        let state = GameState { specs_world: world };
+
+        let start_scene = scenes::start::StartScene::new(ctx, &mut world);
+        let scene_stack = scene::SceneStack { current_scenes: vec![Box::new(start_scene)] };
+
+        let state = GameState { world, scene_stack };
         Ok(state)
     }
 }
@@ -66,8 +70,8 @@ impl event::EventHandler for GameState {
     fn draw(&mut self, ctx: &mut Context) -> GameResult<()> {
         use specs::Join;
 
-        let drawings = self.specs_world.read_storage::<components::Draw>();
-        let positions = self.specs_world.read_storage::<components::Position>();
+        let drawings = self.world.specs_world.read_storage::<components::Draw>();
+        let positions = self.world.specs_world.read_storage::<components::Position>();
 
         graphics::clear(ctx);
 

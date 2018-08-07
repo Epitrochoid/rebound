@@ -18,3 +18,17 @@ impl StartScene {
         Self { center_text: text }
     }
 }
+
+impl scene::Scene for StartScene {
+    type Ctx = ggez::Context;
+
+    fn update(&mut self, context: &mut Self::Ctx) -> scene::SceneCommand<Self::Ctx> {
+        scene::SceneCommand::None
+    }
+
+    fn draw(&mut self, context: &mut Self::Ctx) {
+        let loc = graphics::Point2::new(100.0, 100.0);
+        graphics::draw(context, &self.center_text, loc, 0.0)
+            .expect("Could not draw 'Start!' text");
+    }
+}
