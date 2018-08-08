@@ -79,6 +79,12 @@ impl event::EventHandler for GameState {
             graphics::draw(ctx, &draw.0, graphics::Point2::new(pos.0.x, pos.0.y), 0.0)?;
         }
 
+        // Draw the current scene
+        let scenes = &mut self.scene_stack.current_scenes;
+        for s in scenes.into_iter() {
+            s.draw(ctx);
+        }
+
         graphics::present(ctx);
         Ok(())
     }
